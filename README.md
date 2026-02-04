@@ -64,6 +64,12 @@ patient_readmission_prediction/
 │   ├── label_encoders.pkl
 │   └── feature_names.pkl
 │
+├── ui/                               # Web UI application
+│   ├── app.py                        # Streamlit web application
+│   ├── requirements.txt              # UI dependencies
+│   ├── run.sh                        # Launch script
+│   └── README.md                     # UI documentation
+│
 ├── .gitignore                        # Git ignore file
 └── README.md                         # Project documentation
 ```
@@ -133,6 +139,34 @@ This notebook will:
 - Evaluate model performance
 - Generate visualizations (Confusion Matrix, ROC Curve, Feature Importance)
 - Save trained model to `models/` folder
+
+### 3. Web UI Application
+
+Launch the interactive web application for making predictions:
+
+```bash
+cd ui
+./run.sh
+```
+
+Or manually:
+
+```bash
+cd ui
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+The web application provides:
+- 🖥️ User-friendly interface for entering patient details
+- 🔮 Real-time readmission risk prediction
+- 📊 Visual risk assessment with probability scores
+- 💡 Clinical recommendations based on risk level
+- 📈 Feature importance analysis
+
+Access the app at: `http://localhost:8501`
 
 ## 📈 Model Performance
 
