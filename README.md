@@ -54,8 +54,8 @@ Access at: `http://localhost:8501`
 
 ## Key Improvements
 
-- Uses individual lab values (not averaged)
-- Balanced dataset (131 readmitted + 200 healthy cases)
+- Uses individual lab values 
+- Balanced dataset 
 - Only clinically relevant features
 - Professional web interface for predictions
 - ✅ Converts categorical variables using Label Encoding
