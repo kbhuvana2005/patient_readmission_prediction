@@ -1,1 +1,26 @@
+# Ignore large dataset files
+dataset/
+cleaned_data/
+.venv
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual Environment
 .venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
