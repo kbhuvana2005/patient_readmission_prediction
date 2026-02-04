@@ -196,34 +196,3 @@ Readmission Rate: ~XX%
 Training Set: 28,916 records (80%)
 Testing Set: 7,229 records (20%)
 ```
-
-## 🔮 Future Improvements
-
-- [ ] Implement additional algorithms (XGBoost, LightGBM, Neural Networks)
-- [ ] Perform hyperparameter tuning using GridSearchCV
-- [ ] Add SMOTE for better handling of class imbalance
-- [ ] Create a web application for real-time predictions
-- [ ] Add time-series features (seasonal patterns, trends)
-- [ ] Implement feature selection techniques
-- [ ] Add cross-validation for more robust evaluation
-- [ ] Create automated retraining pipeline
-- [ ] Deploy model as REST API using Flask/FastAPI
-- [ ] Add model explainability using SHAP values
-
-## 📝 Notes
-
-- **Data Privacy**: Ensure compliance with HIPAA and other healthcare data regulations
-- **Model Updates**: Retrain model periodically with new data for better performance
-- **Threshold Tuning**: Adjust prediction threshold based on business requirements (precision vs recall trade-off)
-
-## 👤 Author
-
-**Arvind**
-
-## 📄 License
-
-This project is created for educational and research purposes.
-
----
-
-**Note**: This is a machine learning model for research purposes. Always consult healthcare professionals for medical decisions.
