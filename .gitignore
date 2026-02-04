@@ -1,7 +1,6 @@
 # Ignore large dataset files
 dataset/
 cleaned_data/
-.venv
 # Python
 __pycache__/
 *.py[cod]
