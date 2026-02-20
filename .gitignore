@@ -1,0 +1,23 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*
+
+# Build outputs
+dist/
+build/
+
+# Python (if model_service uses Python)
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# OS junk
+.DS_Store
+Thumbs.db
