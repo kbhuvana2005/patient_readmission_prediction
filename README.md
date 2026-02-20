@@ -17,25 +17,25 @@ v5/
 ## How to use
 
 ### 1. Running the ML API
-
+```
 cd model_service
 python -m venv venv
 venv\Scripts\activate        # Windows
 
 pip install -r requirements.txt
 uvicorn main:app --reload
-
+```
 ### 2. Backend
-
+```
 cd backend
 npm install
 node server.js
-
+```
 ### 3. Frontend
-
+```
 cd frontend
 npm install
 npm start
-
+```
 ### You need all three terminals running simultaneously
 
