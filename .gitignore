@@ -18,6 +18,12 @@ __pycache__/
 venv/
 .venv/
 
+model_service/__pycache__/
+model_service/*.pyc
+model_service/venv/
+model_service/.venv/
+
+
 # OS junk
 .DS_Store
 Thumbs.db
