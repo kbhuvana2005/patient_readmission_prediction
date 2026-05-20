@@ -83,6 +83,11 @@ Access at: `http://localhost:8501`
 - **Matplotlib & Seaborn** - Data visualization
 - **Jupyter Notebook** - Interactive development environment
 
+## Output
+<img width="1920" height="1080" alt="Screenshot 2026-05-20 215812" src="https://github.com/user-attachments/assets/5c4411ef-e385-4213-b177-c8b2ad369d4e" />
+<img width="1920" height="1080" alt="Screenshot 2026-05-20 220109" src="https://github.com/user-attachments/assets/869426a8-2253-46fb-af95-e2c7adfec916" />
+<img width="1920" height="1080" alt="Screenshot 2026-05-20 220117" src="https://github.com/user-attachments/assets/85c032e7-0da8-4df7-9d5d-71a1bd344c93" />
+
 ## 📊 Results
 
 The model successfully identifies patients at risk of readmission with:
