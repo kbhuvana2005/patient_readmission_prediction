@@ -50,6 +50,9 @@ function App() {
 
   const [result, setResult] = useState(null);
 
+  const [patientId, setPatientId] = useState("");
+  const [loadingPatient, setLoadingPatient] = useState(false);
+
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -94,6 +97,42 @@ function App() {
       setToken(res.data.token);
     } catch {
       alert("Login failed");
+    }
+  };
+
+  const fetchPatient = async () => {
+    if (!patientId) {
+      alert("Enter Patient ID");
+      return;
+    }
+
+    try {
+      setLoadingPatient(true);
+
+      const res = await axios.get(
+        `http://localhost:5000/api/patient/${patientId}`
+      );
+
+      const data = res.data;
+
+      // Set date states (your useEffect will auto-calc age & LOS)
+      setDob(data.dob);
+      setAdmissionDate(data.admission_date);
+      setDischargeDate(data.discharge_date);
+
+      // Fill non-lab form fields
+      setFormData(prev => ({
+        ...prev,
+        PatientGender: data.gender,
+        PreviousAdmissions: Number(data.previous_admissions),
+        DiagnosisChapter: data.diagnosis_chapter,
+        NumLabs: Number(data.num_labs)
+      }));
+
+    } catch (err) {
+      alert("Patient not found");
+    } finally {
+      setLoadingPatient(false);
     }
   };
 
@@ -186,119 +225,289 @@ function App() {
 
   return (
     <div className="page">
-    <h1>Patient Readmission Prediction</h1>
-
-    <div className="grid">
-
-      {/* Personal Details */}
-      <div className="card">
-        <h3>Personal Details</h3>
-
-        <label>Date of Birth</label>
-        <input type="date" onChange={(e) => setDob(e.target.value)} />
-
-        <label>Age</label>
-        <input value={formData.PatientAge || ""} readOnly />
-
-        <label>Gender</label>
-        <select onChange={(e) => setFormData({ ...formData, PatientGender: e.target.value })}>
-          <option value="">Select</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
+      <div className="page-header">
+        <h1>Patient Readmission Prediction</h1>
       </div>
 
-      {/* Admission Details */}
-      <div className="card">
-        <h3>Admission Details</h3>
+      {/* Fetch Section */}
+      <div className="top-section">
 
-        <label>Admission Date</label>
-        <input type="date" onChange={(e) => setAdmissionDate(e.target.value)} />
+        <div className="card fetch-card">
 
-        <label>Discharge Date</label>
-        <input type="date" onChange={(e) => setDischargeDate(e.target.value)} />
+          <h3>Fetch Patient Record</h3>
 
-        <label>Length of Stay (days)</label>
-        <input value={formData.LengthOfStay || ""} readOnly />
+          <div className="fetch-row">
 
-        <label>Previous Admissions</label>
-        <input type="number" onChange={(e) => setFormData({ ...formData, PreviousAdmissions: Number(e.target.value) })} />
+            <div className="field-group fetch-input">
 
-        <label>Diagnosis Chapter</label>
-        <select
-          value={formData.DiagnosisChapter}
-          onChange={(e) => setFormData({ ...formData, DiagnosisChapter: e.target.value })}
-        >
-          <option value="">Select Chapter</option>
-          {diagnosisOptions.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
-          ))}
-        </select>
+              <label>Patient ID</label>
+
+              <input
+                type="text"
+                value={patientId}
+                onChange={(e) => setPatientId(e.target.value)}
+                placeholder="Enter patient identifier"
+              />
+
+            </div>
+
+            <button
+              className="fetch-btn fetch-action-btn"
+              onClick={fetchPatient}
+              disabled={loadingPatient}
+            >
+              {loadingPatient ? "Fetching..." : "Fetch Details"}
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+      {/* Personal + Admission */}
+      <div className="details-grid">
+
+        {/* Personal Details */}
+        <div className="card equal-card">
+
+          <h3>Personal Details</h3>
+
+          <div className="field-group">
+            <label>Date of Birth</label>
+
+            <input
+              type="date"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Age</label>
+
+            <input
+              value={formData.PatientAge || ""}
+              readOnly
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Gender</label>
+
+            <select
+              value={formData.PatientGender}
+              disabled
+            >
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+        </div>
+
+        {/* Admission Details */}
+        <div className="card equal-card">
+
+          <h3>Admission Details</h3>
+
+          <div className="field-group">
+            <label>Admission Date</label>
+
+            <input
+              type="date"
+              value={admissionDate}
+              onChange={(e) => setAdmissionDate(e.target.value)}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Discharge Date</label>
+
+            <input
+              type="date"
+              value={dischargeDate}
+              onChange={(e) => setDischargeDate(e.target.value)}
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Length of Stay (days)</label>
+
+            <input
+              value={formData.LengthOfStay || ""}
+              readOnly
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Previous Admissions</label>
+
+            <input
+              type="number"
+              value={formData.PreviousAdmissions || ""}
+              readOnly
+            />
+          </div>
+
+          <div className="field-group">
+            <label>Diagnosis Chapter</label>
+
+            <select
+              value={formData.DiagnosisChapter}
+              disabled
+            >
+              <option value="">Select Chapter</option>
+
+              {diagnosisOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+        </div>
+
       </div>
 
       {/* Lab Parameters */}
-      <div className="card">
-        <h3>Lab Parameters</h3>
+      <div className="lab-section">
 
-        {["hemoglobin_avg","glucose_avg","creatinine_avg","wbc_avg"].map((lab) => (
-          <div key={lab}>
-            <label>{lab.replace("_avg","").replace("_"," ").toUpperCase()}</label>
-            <input
-              type="number"
-              className={errors[lab] ? "input-error" : ""}
-              onChange={(e) => {
-                const value = e.target.value ? Number(e.target.value) : 0;
-                setFormData({ ...formData, [lab]: value });
+        <div className="card">
 
-                const errorMsg = validateLabs(lab, value);
-                setErrors(prev => ({ ...prev, [lab]: errorMsg }));
-              }}
-            />
-            {errors[lab] && <div className="error-text">{errors[lab]}</div>}
+          <h3>Laboratory Parameters</h3>
+
+          <div className="lab-grid">
+
+            {[
+              "hemoglobin_avg",
+              "glucose_avg",
+              "creatinine_avg",
+              "wbc_avg"
+            ].map((lab) => (
+              <div className="field-group" key={lab}>
+
+                <label>
+                  {lab
+                    .replace("_avg", "")
+                    .replace("_", " ")
+                    .toUpperCase()}
+                </label>
+
+                <input
+                  type="number"
+                  className={errors[lab] ? "input-error" : ""}
+                  onChange={(e) => {
+
+                    const value = e.target.value
+                      ? Number(e.target.value)
+                      : 0;
+
+                    setFormData({
+                      ...formData,
+                      [lab]: value
+                    });
+
+                    const errorMsg = validateLabs(lab, value);
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      [lab]: errorMsg
+                    }));
+                  }}
+                  placeholder="Enter value"
+                />
+
+                {errors[lab] && (
+                  <div className="error-text">
+                    {errors[lab]}
+                  </div>
+                )}
+
+              </div>
+            ))}
+
           </div>
-        ))}
-      </div>
 
-    </div>
-
-    <div className="predict-section">
-      <button onClick={predict}>Predict</button>
-    </div>
-
-    {result && (
-      <div className="modal-overlay">
-        <div className="modal-card">
-          <button className="close-btn" onClick={() => setResult(null)}>×</button>
-          <h3>Prediction Result</h3>
-          <div className="result-row">
-            <span>Readmission Risk:</span>
-            <span>{result.readmission_probability.toFixed(1)}%</span>
-          </div>
-          <div className="result-row">
-            <span>Not Readmitted Probability:</span>
-            <span>{result.not_readmitted_probability.toFixed(1)}%</span>
-          </div>
-          <div className="result-row">
-            <span>Prediction:</span>
-            <span>{result.prediction === 1 ? "Readmitted" : "Not Readmitted"}</span>
-          </div>
-          <div className="result-row">
-            <span>Confidence:</span>
-            <span>{result.confidence.toFixed(1)}%</span>
-          </div>
-
-          {/* Dummy medical workflow button */}
-          <button
-            className="doctor-btn"
-            onClick={() => alert("This would send the result for doctor review")}
-          >
-            Send to Doctor for Review
-          </button>
         </div>
+
       </div>
-    )}
-  </div>
+
+      {/* Predict Button */}
+      <div className="predict-section">
+
+        <button
+          className="predict-btn"
+          onClick={predict}
+          disabled={!formData.PatientGender}
+        >
+          Predict Readmission Risk
+        </button>
+
+      </div>
+
+      {/* Result Modal */}
+      {result && (
+        <div className="modal-overlay">
+
+          <div className="modal-card">
+
+            <button
+              className="close-btn"
+              onClick={() => setResult(null)}
+            >
+              ×
+            </button>
+
+            <h3>Prediction Result</h3>
+
+            <div className="result-row">
+              <span>Readmission Risk</span>
+              <span>
+                {result.readmission_probability.toFixed(1)}%
+              </span>
+            </div>
+
+            <div className="result-row">
+              <span>Not Readmitted Probability</span>
+              <span>
+                {result.not_readmitted_probability.toFixed(1)}%
+              </span>
+            </div>
+
+            <div className="result-row">
+              <span>Prediction Outcome</span>
+              <span>
+                {result.prediction === 1
+                  ? "Readmitted"
+                  : "Not Readmitted"}
+              </span>
+            </div>
+
+            <div className="result-row">
+              <span>Model Confidence</span>
+              <span>
+                {result.confidence.toFixed(1)}%
+              </span>
+            </div>
+
+            <button
+              className="doctor-btn"
+              onClick={() =>
+                alert("This would send the result for doctor review")
+              }
+            >
+              Send to Doctor for Review
+            </button>
+
+          </div>
+
+        </div>
+      )}
+
+    </div>
   );
 }
 

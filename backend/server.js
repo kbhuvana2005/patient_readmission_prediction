@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const fs = require("fs");
+const csv = require("csv-parser");
 
 require("dotenv").config();
 
@@ -67,7 +69,29 @@ app.post("/api/predict", async (req, res) => {
   }
 });
 
+app.get("/api/patient/:id", (req, res) => {
+  const patientId = req.params.id;
+  const results = [];
 
+  fs.createReadStream("data/patients.csv")
+    .pipe(csv())
+    .on("data", (data) => {
+      if (data.patient_id === patientId) {
+        results.push(data);
+      }
+    })
+    .on("end", () => {
+      if (results.length === 0) {
+        return res.status(404).json({ message: "Patient not found" });
+      }
+
+      res.json(results[0]);
+    })
+    .on("error", (err) => {
+      console.error("CSV Read Error:", err);
+      res.status(500).json({ message: "Error reading patient data" });
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);

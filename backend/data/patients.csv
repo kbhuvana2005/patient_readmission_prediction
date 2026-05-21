@@ -1,0 +1,4 @@
+patient_id,dob,gender,admission_date,discharge_date,previous_admissions,diagnosis_chapter,num_labs
+1001,1980-05-12,Male,2026-01-01,2026-01-05,2,IX - Circulatory system,12
+1002,1972-11-21,Female,2026-02-03,2026-02-10,1,X - Respiratory system,9
+1003,1995-07-09,Male,2026-02-15,2026-02-18,0,XI - Digestive system,6
